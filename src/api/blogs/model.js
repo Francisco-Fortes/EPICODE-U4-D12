@@ -1,4 +1,4 @@
-import mongoose, { model } from "mongoose";
+import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 import authorsSchema from "../authors/model.js";
 
@@ -20,7 +20,8 @@ const blogsSchema = new Schema(
   // "updatedAt": "DATE"
 );
 
-model("Blog", blogsSchema);
+export default model("Blog", blogsSchema);
+//The name to import it is BlogsModel
 //this module it is going to linked to "blogs" collection automatically
 //if the collection does not exist, it will be created automatically
 
