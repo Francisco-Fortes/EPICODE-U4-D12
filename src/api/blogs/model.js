@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
-import authorsSchema from "../authors/model.js";
+// import authorsSchema from "../authors/model.js";
 
 const blogsSchema = new Schema(
   {
     //First parameter of the Schema is the structure
+    //Second parameter are Options like timestamp
     category: { type: String, required: true },
     title: { type: String, required: true },
     cover: { type: String, required: true },
@@ -12,7 +13,7 @@ const blogsSchema = new Schema(
       value: { type: Number, required: true },
       unit: { type: String, required: true },
     },
-    author: { authorsSchema },
+    //     author: { authorsSchema },
   },
   { timestamps: true }
   //MongoDB handles automatically
@@ -21,8 +22,9 @@ const blogsSchema = new Schema(
 );
 
 export default model("Blog", blogsSchema);
+//The extra -s is added automatically by MongoDB
 //The name to import it is BlogsModel
-//this module it is going to linked to "blogs" collection automatically
+//this module it is going to linked to "Blogs" collection automatically
 //if the collection does not exist, it will be created automatically
 
 // {

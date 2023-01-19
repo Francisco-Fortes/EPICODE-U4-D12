@@ -3,6 +3,11 @@ import listEndpoints from "express-list-endpoints";
 import cors from "cors";
 import mongoose from "mongoose";
 import blogsRouter from "./api/blogs/index.js";
+import {
+  badRequestErrorHandler,
+  notFoundErrorHandler,
+  genericErrorHandler,
+} from "./errorHandlers.js";
 
 const server = express();
 const port = process.env.PORT || 3001;
@@ -16,9 +21,12 @@ server.use(express.json());
 server.use("/blogs", blogsRouter);
 
 //ErrorHandlers
+server.use(badRequestErrorHandler);
+server.use(notFoundErrorHandler);
+server.use(genericErrorHandler);
 
 mongoose.set("strictQuery", false);
-//Why we are using this?
+//We place this to set the strictQuery to false prior the update that is going to take place
 mongoose.connect(process.env.MONGO_CONNECTION_STRING);
 //It only takes one parameter, the connection string (URL) from Mongo
 
