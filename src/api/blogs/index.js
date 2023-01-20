@@ -46,6 +46,38 @@ blogsRouter.get("/:blogId", async (req, res, next) => {
 
 blogsRouter.put("/:blogId", async (req, res, next) => {
   try {
+    //Alternative method
+    //     const blog = await BlogsModel.findById(req.params.blogId);
+    //     //findById, findOne, findByIdAndUpdate... retrieve a MONGOOSE DOC
+    //     //an object with superpowers that for example has .save() method
+    //     blog.title = "The New ALTERNATIVE Venus (EDITED)";
+    //     //We are modifying from here, it does not matter if we write something in the body or not
+    //     await blog.save();
+    //     if (blog) {
+    //       res.send(blog);
+    //     } else {
+    //       next(createHttpError(404, `Blog with ID ${req.params.blogId} not found`));
+    //     }
+    //   } catch (error) {
+    //     next(error);
+    //   }
+    // });
+    //------------------
+    const updatedBlog = await BlogsModel.findByIdAndUpdate(
+      //Max of 3 parameters
+      req.params.blogId, //Which one you want to modify
+      req.body, //How you want to modify
+      { new: true, runValidators: true } //Options
+      //By default findByIdAndUpdate() returns the record pre-modification {new: false},
+      //to retrieve the modified one we need {new: true}
+      //By default findByIdAndUpdate() is not running validators {runValidators: false},
+      //in order to make them run we need {runValidators: true}
+    );
+    if (updatedBlog) {
+      res.send(updatedBlog);
+    } else {
+      next(createHttpError(404, `Blog with ID ${req.params.blogId} not found`));
+    }
   } catch (error) {
     next(error);
   }
@@ -53,6 +85,12 @@ blogsRouter.put("/:blogId", async (req, res, next) => {
 
 blogsRouter.delete("/:blogId", async (req, res, next) => {
   try {
+    const deletedBlog = await BlogsModel.findByIdAndDelete(req.params.blogId);
+    if (deletedBlog) {
+      res.status(204).send();
+    } else {
+      next(createHttpError(404, `Blog with ID ${req.params.blogId} not found`));
+    }
   } catch (error) {
     next(error);
   }
